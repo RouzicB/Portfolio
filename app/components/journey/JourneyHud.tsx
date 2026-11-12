@@ -7,30 +7,46 @@ import Objective from "../tablet/Objective";
 import InnerVoice from "../tablet/InnerVoice";
 import { useJourney } from "./JourneyContext";
 import { useDiode } from "../../lib/diode";
+import { FOOTER_ID, OVERLAY_ID } from "../../lib/screen";
 
 /** Interface du voyage : « Page n/N », lecture, frise code-barres, objectif et pensée de la scène */
-export default function JourneyHud({ progress }: Readonly<{ progress: MotionValue<number> }>) {
+export default function JourneyHud({
+  progress,
+}: Readonly<{ progress: MotionValue<number> }>) {
   const { scene, scenes, goTo, playing, togglePlay } = useJourney();
   const diode = useDiode();
   const current = scenes[scene];
 
-  // Rendu dans <body> : reste fixe même quand la scène « glitche »
+  // Rendu dans le calque de l'écran et dans le pied de la tablette : reste fixe même quand la scène « glitche »
   return (
-    <ClientPortal>
-      <Objective text={current.objective} />
-      <InnerVoice id={`accueil:${current.id}`} text={current.thought} />
-      <BottomBar
-        progress={progress}
-        tone={diode === "loading" ? "loading" : "hud"}
-        page={{ current: scene + 1, total: scenes.length, label: current.label }}
-        onPrev={() => goTo(scene - 1)}
-        onNext={() => goTo(scene + 1)}
-        extra={
-          <button type="button" onClick={togglePlay} aria-pressed={playing} className="hidden text-[13px] uppercase tracking-[0.06em] text-fg hover:text-cobalt md:inline">
-            {playing ? "❚❚ Pause" : "▶ Lecture"}
-          </button>
-        }
-      />
-    </ClientPortal>
+    <>
+      <ClientPortal target={OVERLAY_ID}>
+        <Objective text={current.objective} />
+        <InnerVoice id={`accueil:${current.id}`} text={current.thought} />
+      </ClientPortal>
+      <ClientPortal target={FOOTER_ID}>
+        <BottomBar
+          progress={progress}
+          tone={diode === "loading" ? "loading" : "hud"}
+          page={{
+            current: scene + 1,
+            total: scenes.length,
+            label: current.label,
+          }}
+          onPrev={() => goTo(scene - 1)}
+          onNext={() => goTo(scene + 1)}
+          extra={
+            <button
+              type="button"
+              onClick={togglePlay}
+              aria-pressed={playing}
+              className="hidden text-[13px] uppercase tracking-[0.06em] text-fg hover:text-cobalt md:inline"
+            >
+              {playing ? "❚❚ Pause" : "▶ Lecture"}
+            </button>
+          }
+        />
+      </ClientPortal>
+    </>
   );
 }

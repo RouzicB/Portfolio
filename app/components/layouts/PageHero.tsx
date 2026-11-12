@@ -8,7 +8,7 @@ import { stagger } from "../journey/motion";
 /** En-tête des pages classiques, sur le même gabarit que les scènes (texte 5/12, visuel 7/12) */
 export default function PageHero({ left, right }: Readonly<{ left: ReactNode; right?: ReactNode }>) {
   return (
-    <Container className="grid min-h-[min(calc(100svh-170px),780px)] grid-cols-1 content-center gap-12 pb-12 pt-14 lg:grid-cols-12 lg:items-center lg:gap-8 lg:pr-12">
+    <Container className="grid min-h-[min(var(--screen-h),780px)] grid-cols-1 content-center gap-12 pb-12 pt-14 lg:grid-cols-12 lg:items-center lg:gap-8 lg:pr-12">
       <motion.div variants={stagger} initial="hidden" animate="show" className="lg:col-span-5 lg:pl-14">
         {left}
       </motion.div>

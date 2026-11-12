@@ -10,7 +10,7 @@ export default function SplitHandle({ className = "" }: Readonly<{ className?: s
       {/* Graduations le long du séparateur */}
       <span className="absolute inset-y-6 left-1/2 w-2 -translate-x-1/2 bg-[repeating-linear-gradient(180deg,var(--line)_0_1px,transparent_1px_24px)]" />
       {/* Poignée */}
-      <span className="absolute left-1/2 top-[min(50%,calc(50vh-100px))] h-14 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-muted/70 shadow-[0_0_0_3px_var(--surface)]" />
+      <span className="absolute left-1/2 top-[min(50%,calc(var(--screen-h,600px)/2))] h-14 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-muted/70 shadow-[0_0_0_3px_var(--surface)]" />
     </div>
   );
 }

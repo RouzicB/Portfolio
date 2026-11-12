@@ -6,7 +6,6 @@ import { useTransform, type MotionValue } from "framer-motion";
 import Barcode from "./Barcode";
 import PageTag from "../tablet/PageTag";
 import KeyHints from "../tablet/KeyHints";
-import ThemeSwitcher from "../themes/ThemeSwitcher";
 import { credits } from "../../data/site";
 import { timecode } from "../../lib/format";
 
@@ -20,18 +19,18 @@ interface BottomBarProps {
   extra?: ReactNode;
 }
 
-/** Bas de l'écran, sous la tablette : « Page n/N » · frise code-barres · commandes · Jour / Nuit */
+/** Pied de la tablette : « Page n/N » · frise code-barres · commandes · crédits */
 export default function BottomBar({ progress, tone = "hud", page, onPrev, onNext, extra }: Readonly<BottomBarProps>) {
   const label = useTransform(progress, (v) => timecode(v));
 
   return (
-    <div className="chrome-ui fixed inset-x-0 bottom-0 z-30 bg-gradient-to-t from-bg via-bg/85 to-transparent">
-      <div className="relative mx-auto flex h-[70px] max-w-[1320px] items-center gap-3 px-3 sm:gap-5 sm:px-6 lg:gap-8 lg:px-10">
+    <footer className="relative">
+      <div className="relative flex h-[62px] items-center gap-3 pl-10 pr-4 sm:gap-5 sm:pl-12 sm:pr-6 lg:gap-8 lg:pl-14 lg:pr-8">
         {/* Crédit de la direction artistique, sous la frise */}
         <Link
           href="/credits"
           data-prompt="underline"
-          className="absolute bottom-1 left-1/2 hidden -translate-x-1/2 whitespace-nowrap text-[8px] tracking-[0.04em] text-muted transition-colors hover:text-hud-ink sm:block"
+          className="absolute bottom-0.5 left-1/2 hidden -translate-x-1/2 whitespace-nowrap text-[8px] tracking-[0.04em] text-muted transition-colors hover:text-hud-ink sm:block"
         >
           {credits.short} · Crédits
         </Link>
@@ -42,9 +41,8 @@ export default function BottomBar({ progress, tone = "hud", page, onPrev, onNext
         </div>
         <div className="ml-auto flex shrink-0 items-center gap-6 text-[13px] uppercase text-fg sm:ml-0">
           <KeyHints />
-          <ThemeSwitcher />
         </div>
       </div>
-    </div>
+    </footer>
   );
 }

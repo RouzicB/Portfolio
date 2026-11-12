@@ -4,7 +4,6 @@ import { type ReactNode } from "react";
 import { motion } from "framer-motion";
 import TabletSpread, { type Screen } from "../../tablet/TabletSpread";
 import type { ScreenBackdropVariant } from "../../tablet/ScreenBackdrop";
-import { useJourney } from "../JourneyContext";
 import { fadeUp, stagger } from "../motion";
 
 /** Élément du volet de gauche : apparaît en cascade après la transition */
@@ -29,18 +28,15 @@ interface SceneLayoutProps {
   seed?: number;
 }
 
-/** Gabarit commun aux scènes : la tablette en écran partagé, entre les onglets et la barre basse */
+/** Gabarit commun aux scènes : l'écran de la tablette, partagé en deux volets */
 export default function SceneLayout({ left, right, rightOnMobile = false, screen = "panel", backdrop = "triangles", seed = 0 }: Readonly<SceneLayoutProps>) {
-  const { scene, scenes } = useJourney();
   return (
-    <div className="h-full px-2 pb-[74px] pt-[66px] sm:px-4 lg:px-8">
+    <div className="h-full">
       <TabletSpread
-        fill
         seed={seed}
         screen={screen}
         backdrop={backdrop}
         rightOnMobile={rightOnMobile}
-        app={`Accueil · ${scenes[scene]?.label ?? ""}`}
         left={
           <motion.div variants={stagger} initial="hidden" animate="show">
             {left}

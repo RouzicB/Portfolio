@@ -71,7 +71,7 @@ function Subtitle({ id, text }: Readonly<{ id: string; text: string }>) {
  */
 export default function InnerVoice({ id, text }: Readonly<{ id: string; text?: string }>) {
   return (
-    <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-4 bottom-[86px] z-[36]">
+    <div role="status" aria-live="polite" className="pointer-events-none absolute inset-x-4 bottom-6">
       {text && <Subtitle key={id} id={id} text={text} />}
     </div>
   );

@@ -26,3 +26,17 @@ describe("pageCount", () => {
     expect(pageCount(5000, 800, 3200).current).toBe(4);
   });
 });
+
+describe("slideDirection", () => {
+  it("fait glisser la page selon la position des onglets", () => {
+    const { slideDirection } = jest.requireActual("@/app/data/tablet");
+    expect(slideDirection(null, "/projets")).toBe(0);
+    expect(slideDirection("/projets", "/projets")).toBe(0);
+    expect(slideDirection("/", "/contact")).toBe(1);
+    expect(slideDirection("/parcours", "/a-propos")).toBe(-1);
+    // Une étude de cas est juste à droite des projets, avant le parcours
+    expect(slideDirection("/projets", "/projets/reservation-terrains")).toBe(1);
+    expect(slideDirection("/projets/reservation-terrains", "/parcours")).toBe(1);
+    expect(slideDirection("/credits", "/contact")).toBe(-1);
+  });
+});

@@ -255,7 +255,8 @@ export default function InteractionLayer() {
     document.addEventListener("keydown", onKeyDown, true);
     document.addEventListener("focusin", onFocusIn);
     document.addEventListener("focusout", onFocusOut);
-    window.addEventListener("scroll", queueScan, { passive: true });
+    // L'écran de la tablette défile (pas la fenêtre) : on écoute tous les défilements
+    document.addEventListener("scroll", queueScan, { passive: true, capture: true });
     return () => {
       cancelAnimationFrame(raf);
       document.removeEventListener("pointerover", onPointerOver);
@@ -265,7 +266,7 @@ export default function InteractionLayer() {
       document.removeEventListener("keydown", onKeyDown, true);
       document.removeEventListener("focusin", onFocusIn);
       document.removeEventListener("focusout", onFocusOut);
-      window.removeEventListener("scroll", queueScan);
+      document.removeEventListener("scroll", queueScan, { capture: true });
     };
   }, []);
 

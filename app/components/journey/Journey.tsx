@@ -17,6 +17,7 @@ import { EASE } from "./motion";
 import { flashLoading } from "../../lib/diode";
 import { playRewind } from "../../lib/rewind";
 import { setMoodOverride } from "../../lib/mood";
+import { useScreenRef } from "../../lib/screen";
 
 /** Durée d'une scène en lecture automatique */
 const AUTOPLAY_MS = 5000;
@@ -107,7 +108,8 @@ function SceneSlot({ def, index, range, progress, direction, firstVisit, reduce 
 export default function Journey({ scenes }: Readonly<{ scenes: SceneDef[] }>) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion() ?? false;
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const container = useScreenRef();
+  const { scrollYProgress } = useScroll({ target: ref, container, offset: ["start start", "end end"] });
   const { bounds, totalLength } = useMemo(() => sceneBounds(scenes), [scenes]);
 
   const [entry, setEntry] = useState({ index: 0, direction: 1, firstVisit: true });
@@ -141,13 +143,14 @@ export default function Journey({ scenes }: Readonly<{ scenes: SceneDef[] }>) {
   const goTo = useCallback(
     (i: number) => {
       const el = ref.current;
-      if (!el || i < 0 || i >= bounds.length) return;
+      const screen = container.current;
+      if (!el || !screen || i < 0 || i >= bounds.length) return;
       const [start, end] = bounds[i];
       const v = start + (end - start) * 0.04;
-      const top = el.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: top + v * (el.offsetHeight - window.innerHeight), behavior: reduce ? "auto" : "smooth" });
+      const top = el.getBoundingClientRect().top - screen.getBoundingClientRect().top + screen.scrollTop;
+      screen.scrollTo({ top: top + v * (el.offsetHeight - screen.clientHeight), behavior: reduce ? "auto" : "smooth" });
     },
-    [bounds, reduce]
+    [bounds, reduce, container]
   );
 
   // Lecture automatique : passe à la scène suivante, s'arrête à la dernière
@@ -177,8 +180,8 @@ export default function Journey({ scenes }: Readonly<{ scenes: SceneDef[] }>) {
     <JourneyContext.Provider value={value}>
       <JourneyHud progress={scrollYProgress} />
       {/* Hauteur = longueur totale de scroll + un écran pour la dernière scène */}
-      <div ref={ref} className="relative" style={{ height: `${(totalLength + 1) * 100}vh` }}>
-        <div className="rewind-target sticky top-0 h-svh overflow-hidden">
+      <div ref={ref} className="relative" style={{ height: `calc(var(--screen-h) * ${totalLength + 1})` }}>
+        <div className="sticky top-0 h-[var(--screen-h)] overflow-hidden">
           <AnimatePresence initial={false} custom={{ dir: entry.direction, reduce }}>
             <SceneSlot
               key={def.id}

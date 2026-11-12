@@ -27,7 +27,7 @@ export default function ConsequenceToast() {
   }, []);
 
   return (
-    <div role="status" aria-live="polite" className="pointer-events-none fixed left-4 top-[112px] z-[57] sm:left-8">
+    <div role="status" aria-live="polite" className="pointer-events-none fixed left-6 top-[120px] z-[57] sm:left-12 lg:left-16">
       <AnimatePresence>
         {shown > 0 && (
           <motion.div

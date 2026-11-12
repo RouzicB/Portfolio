@@ -65,3 +65,28 @@ export function tabletFor(pathname: string): TabletEntry | undefined {
 
 /** Devises qui défilent dans la marge de l'écran, comme des journaux système */
 export const marginWords = ["TESTER", "ÉCOUTER", "ITÉRER", "PROTOTYPER", "UTILISATEUR D’ABORD", "SIMPLIFIER", "OBSERVER"] as const;
+
+/** Nom de l'application ouverte, affiché dans la barre d'état */
+export function appOf(pathname: string) {
+  if (pathname === "/") return "Accueil";
+  if (pathname.startsWith("/projets/")) return "Projets · Dossier";
+  if (pathname === "/projets") return "Projets · Archives";
+  if (pathname.startsWith("/credits")) return "Crédits";
+  return tabs.find((t) => t.href !== "/" && pathname.startsWith(t.href))?.label ?? "Système";
+}
+
+/**
+ * Position d'une page sur la tablette, de gauche à droite (ordre des onglets) :
+ * une étude de cas est juste à droite des projets, les crédits et pages inconnues tout à droite.
+ */
+export function pageOrder(pathname: string) {
+  if (pathname.startsWith("/projets/")) return tabs.findIndex((t) => t.href === "/projets") + 0.5;
+  const index = tabs.findIndex((t) => isTabActive(t.href, pathname));
+  return index === -1 ? tabs.length : index;
+}
+
+/** Sens du glissement entre deux pages : 1 = vers la droite (la page arrive de la droite), -1 = vers la gauche, 0 = aucun */
+export function slideDirection(from: string | null, to: string) {
+  if (from === null || from === to) return 0;
+  return Math.sign(pageOrder(to) - pageOrder(from)) || 1;
+}

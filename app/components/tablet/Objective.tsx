@@ -40,11 +40,11 @@ function Panel({ text }: Readonly<{ text: string }>) {
   );
 }
 
-/** Encart « Objectif » en haut à droite de la tablette */
+/** Encart « Objectif » en haut à droite de l'écran de la tablette (rendu dans son calque) */
 export default function Objective({ text }: Readonly<{ text?: string }>) {
   if (!text) return null;
   return (
-    <div className="chrome-ui fixed right-[max(1.5rem,calc((100vw-1320px)/2+1.5rem))] top-[112px] z-[38] hidden md:block">
+    <div className="chrome-ui pointer-events-auto absolute right-5 top-4 hidden md:block">
       <Panel key={text} text={text} />
     </div>
   );
