@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Eye, Link2, Mail } from "lucide-react";
+import { ContactIcon, EyeIcon, LinkIcon } from "../components/icons/DetroitIcons";
 import { buttonClasses } from "../components/ui/Button";
 import PageHero from "../components/layouts/PageHero";
 import { Item } from "../components/journey/scenes/SceneLayout";
@@ -37,15 +37,15 @@ export default function ContactPage() {
               </p>
             </Item>
             <Item className="mt-8 flex flex-col items-start gap-4">
-              <IconLink href={`mailto:${site.email}`} icon={Mail} external>
+              <IconLink href={`mailto:${site.email}`} icon={ContactIcon} external>
                 {site.email}
               </IconLink>
               {channels.map((c) => (
-                <IconLink key={c.label} href={c.href} icon={Link2} external>
+                <IconLink key={c.label} href={c.href} icon={LinkIcon} external>
                   {c.label}
                 </IconLink>
               ))}
-              <IconLink href="/projets" icon={Eye}>
+              <IconLink href="/projets" icon={EyeIcon}>
                 Voir les études de cas
               </IconLink>
             </Item>

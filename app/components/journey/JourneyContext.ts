@@ -24,8 +24,6 @@ export interface SceneDef {
   thought?: string;
   /** Lumière autour de la tablette */
   mood?: Mood;
-  /** Moment critique : l'interface s'efface pour laisser place au choix */
-  critical?: boolean;
   render: (props: SceneProps) => ReactNode;
 }
 
@@ -33,9 +31,6 @@ export interface JourneyState {
   scene: number;
   scenes: readonly Omit<SceneDef, "render">[];
   goTo: (index: number) => void;
-  /** Lecture automatique des scènes (LECTURE / PAUSE) */
-  playing: boolean;
-  togglePlay: () => void;
 }
 
 export const JourneyContext = createContext<JourneyState | null>(null);

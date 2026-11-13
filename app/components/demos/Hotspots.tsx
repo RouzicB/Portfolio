@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { CloseIcon } from "../icons/DetroitIcons";
 import { pad } from "../../lib/format";
 
 const notes = [
@@ -191,7 +191,7 @@ export default function Hotspots() {
                 aria-label="Fermer l’annotation"
                 className="absolute right-2 top-2 text-muted hover:text-fg"
               >
-                <X size={14} />
+                <CloseIcon size={14} strokeWidth={1.8} accent="currentColor" />
               </button>
             </motion.div>
           )}

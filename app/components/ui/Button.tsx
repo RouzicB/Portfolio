@@ -1,5 +1,5 @@
 import { type ButtonHTMLAttributes, type ReactNode, forwardRef } from "react";
-import { type LucideIcon } from "lucide-react";
+import { type DetroitIcon } from "../icons/DetroitIcons";
 
 export const buttonVariants = {
   /** Bleu nuit à facettes, avec ombre portée (« LEARN MORE », « EXPLORE ») */
@@ -26,8 +26,8 @@ export function buttonClasses(variant: keyof typeof buttonVariants = "primary", 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: keyof typeof buttonVariants;
   size?: keyof typeof buttonSizes;
-  icon?: LucideIcon;
-  iconRight?: LucideIcon;
+  icon?: DetroitIcon;
+  iconRight?: DetroitIcon;
   children: ReactNode;
 }
 
@@ -40,9 +40,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       className={`${buttonClasses(variant, size)} ${disabled ? "pointer-events-none opacity-50" : ""} ${className}`.trim()}
       {...props}
     >
-      {Icon && <Icon size={16} strokeWidth={1.5} aria-hidden />}
+      {Icon && <Icon size={16} strokeWidth={1.5} accent="currentColor" />}
       {children}
-      {IconRight && <IconRight size={16} strokeWidth={1.5} aria-hidden />}
+      {IconRight && <IconRight size={16} strokeWidth={1.5} accent="currentColor" />}
     </button>
   )
 );

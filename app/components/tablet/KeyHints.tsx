@@ -1,13 +1,13 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { playRewind } from "../../lib/rewind";
+import { BackspaceIcon, EnterIcon } from "../icons/DetroitIcons";
 
 const isTyping = (target: EventTarget | null) =>
   target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName));
 
-function Key({ glyph }: Readonly<{ glyph: string }>) {
+function Key({ glyph }: Readonly<{ glyph: ReactNode }>) {
   return (
     <span aria-hidden className="flex size-6 shrink-0 items-center justify-center rounded-full border border-fg/60 text-[11px] font-semibold leading-none">
       {glyph}
@@ -17,7 +17,7 @@ function Key({ glyph }: Readonly<{ glyph: string }>) {
 
 /**
  * Aide de commandes en bas à droite, comme dans un jeu : ↵ Sélectionner · ⌫ Retour · Q Quitter.
- * Retour lance une reconstruction jusqu'à la page précédente ; Quitter ramène à l'accueil.
+ * Retour ramène à la page précédente ; Quitter ramène à l'accueil.
  */
 export default function KeyHints() {
   const router = useRouter();
@@ -25,7 +25,6 @@ export default function KeyHints() {
   const home = pathname === "/";
 
   const back = useCallback(() => {
-    playRewind(1000);
     if (window.history.length > 1) router.back();
     else router.push("/");
   }, [router]);
@@ -47,12 +46,12 @@ export default function KeyHints() {
   return (
     <div className="hidden items-center gap-4 text-[12px] uppercase tracking-[0.06em] text-fg xl:flex">
       <span className="flex items-center gap-1.5 opacity-80">
-        <Key glyph="↵" /> Sélectionner
+        <Key glyph={<EnterIcon size={13} strokeWidth={1.8} />} /> Sélectionner
       </span>
       {!home && (
         <>
           <button type="button" onClick={back} className="flex items-center gap-1.5 uppercase hover:text-cobalt">
-            <Key glyph="⌫" /> Retour
+            <Key glyph={<BackspaceIcon size={13} strokeWidth={1.6} />} /> Retour
           </button>
           <button type="button" onClick={() => router.push("/")} className="flex items-center gap-1.5 uppercase hover:text-cobalt">
             <Key glyph="Q" /> Quitter

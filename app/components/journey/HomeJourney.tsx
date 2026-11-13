@@ -12,7 +12,7 @@ import ContactScene from "./scenes/ContactScene";
 /**
  * Accueil = la tablette de Baptiste Rouzic, écran par écran.
  * `length` = durée de scroll de la scène, en hauteurs d'écran ; `mood` = lumière autour de la tablette ;
- * `thought` = pensée en sous-titre (elle remplace les indications d'usage) ; `critical` = l'interface s'efface.
+ * `thought` = pensée en sous-titre (elle remplace les indications d'usage).
  */
 const scenes: SceneDef[] = [
   {
@@ -67,7 +67,6 @@ const scenes: SceneDef[] = [
     objective: "Faire un choix",
     thought: "Écrire, ou continuer à explorer ? C’est à toi de décider.",
     mood: "alert",
-    critical: true,
     render: (p) => <ContactScene {...p} />,
   },
 ];

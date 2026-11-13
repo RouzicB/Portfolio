@@ -2,10 +2,13 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { MoonIcon, SunIcon } from "../icons/DetroitIcons";
 
-/** Sélecteur Jour / Nuit à icônes, dans la barre de menu de la tablette : l'option active est surlignée en cyan */
-export default function ThemeSwitcher() {
+/**
+ * Sélecteur Jour / Nuit à icônes, dans la barre de la tablette : l'option active est soulignée de cyan.
+ * `tone="dark"` : sur fond sombre (la barre violette).
+ */
+export default function ThemeSwitcher({ tone = "light" }: Readonly<{ tone?: "light" | "dark" }>) {
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
 
@@ -14,16 +17,19 @@ export default function ThemeSwitcher() {
   useEffect(() => setMounted(true), []);
 
   const isDark = mounted && resolvedTheme === "dark";
-  const option = (active: boolean) =>
-    `flex size-7 items-center justify-center transition-colors ${active ? "bg-fg text-surface shadow-[inset_0_-2px_0_var(--hud)]" : "text-body hover:text-fg"}`;
+  const dark = tone === "dark";
+  const option = (active: boolean) => {
+    if (active) return `flex size-7 items-center justify-center transition-colors shadow-[inset_0_-2px_0_var(--hud)] ${dark ? "bg-white text-[#2b2347]" : "bg-fg text-surface"}`;
+    return `flex size-7 items-center justify-center transition-colors ${dark ? "text-white/70 hover:text-white" : "text-body hover:text-fg"}`;
+  };
 
   return (
-    <div role="group" aria-label="Thème" className="flex items-center border border-line p-0.5">
+    <div role="group" aria-label="Thème" className={`flex items-center border p-0.5 ${dark ? "border-white/25" : "border-line"}`}>
       <button type="button" aria-label="Jour" title="Jour" aria-pressed={!isDark} onClick={() => setTheme("light")} className={option(!isDark)}>
-        <Sun size={15} strokeWidth={1.75} />
+        <SunIcon size={16} strokeWidth={1.5} />
       </button>
       <button type="button" aria-label="Nuit" title="Nuit" aria-pressed={isDark} onClick={() => setTheme("dark")} className={option(isDark)}>
-        <Moon size={15} strokeWidth={1.75} />
+        <MoonIcon size={16} strokeWidth={1.5} />
       </button>
     </div>
   );

@@ -15,9 +15,9 @@ export default function PageHero({ left, right }: Readonly<{ left: ReactNode; ri
       {right && (
         <motion.div
           className="lg:col-span-7"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.7 }}
+          transition={{ delay: 0.6, duration: 0.5, ease: "easeOut" }}
         >
           {right}
         </motion.div>

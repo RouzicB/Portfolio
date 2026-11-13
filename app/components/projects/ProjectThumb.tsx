@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { CheckIcon } from "../icons/DetroitIcons";
 import ScaledFrame from "../ui/ScaledFrame";
 import { AfterScreen } from "../demos/BeforeAfter";
 import { Dashboard } from "../demos/Hotspots";
@@ -22,7 +22,7 @@ function PhonesPreview() {
       </div>
       <div className="flex h-[300px] w-[142px] translate-y-6 flex-col items-center justify-center rounded-[1.6rem] border-[5px] border-[#0d1114] bg-white text-[#0d1114]">
         <span className="flex size-11 items-center justify-center rounded-full bg-[#0079b8] text-white">
-          <Check size={20} />
+          <CheckIcon size={22} strokeWidth={1.8} accent="currentColor" />
         </span>
         <p className="mt-3 text-[11px] font-semibold">Réservation confirmée</p>
       </div>

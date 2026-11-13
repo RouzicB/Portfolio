@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
-import { ArrowLeft, Check, MapPin, Search } from "lucide-react";
+import { ArrowLeftIcon, CheckIcon, MapPinIcon, SearchIcon } from "../icons/DetroitIcons";
 import { pad } from "../../lib/format";
 
 const steps = ["Rechercher", "Choisir un lieu", "Choisir un créneau", "Confirmer"];
@@ -57,7 +57,7 @@ export default function PrototypePhone() {
 
   const back = (to: number) => (
     <button type="button" onClick={() => go(to)} aria-label="Retour" className="mb-3 flex size-7 items-center justify-center rounded-full bg-[#eef1f4]">
-      <ArrowLeft size={12} />
+      <ArrowLeftIcon size={13} strokeWidth={1.8} />
     </button>
   );
 
@@ -70,7 +70,7 @@ export default function PrototypePhone() {
         onClick={() => go(1)}
         className={`mt-4 flex items-center gap-2 rounded-xl bg-[#eef1f4] px-3 py-2.5 text-left text-[11px] ${hint(true)}`}
       >
-        <Search size={12} aria-hidden /> Padel · Lyon · Ce soir
+        <SearchIcon size={13} strokeWidth={1.8} /> Padel · Lyon · Ce soir
       </button>
       <p className={`mt-5 ${eyebrow}`}>Sports</p>
       <div className="mt-2 grid grid-cols-3 gap-2">
@@ -104,7 +104,7 @@ export default function PrototypePhone() {
               <span>
                 <span className="block text-[11px] font-semibold">{v.name}</span>
                 <span className="mt-0.5 flex items-center gap-1 text-[9px] text-[#5f6b75]">
-                  <MapPin size={9} aria-hidden /> {v.meta}
+                  <MapPinIcon size={11} strokeWidth={1.8} /> {v.meta}
                 </span>
               </span>
               <span className="text-[11px] font-semibold text-[#0079b8]">{v.price}</span>
@@ -158,7 +158,7 @@ export default function PrototypePhone() {
 
     <div key="done" className="flex h-full flex-col items-center justify-center px-5 text-center">
       <span className="flex size-14 items-center justify-center rounded-full bg-[#0079b8] text-white">
-        <Check size={24} aria-hidden />
+        <CheckIcon size={26} strokeWidth={1.8} accent="currentColor" />
       </span>
       <p className="mt-4 text-sm font-semibold">Réservation confirmée</p>
       <p className="mt-1 text-[10px] text-[#5f6b75]">
@@ -204,7 +204,7 @@ export default function PrototypePhone() {
                   i < screen ? "border-accent bg-accent text-bg" : i === screen ? "border-accent" : "border-line"
                 }`}
               >
-                {i < screen ? "✓" : i + 1}
+                {i < screen ? <CheckIcon size={12} strokeWidth={2} accent="currentColor" /> : i + 1}
               </span>
               {s}
             </li>

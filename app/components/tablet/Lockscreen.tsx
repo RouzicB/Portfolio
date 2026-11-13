@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { animate, motion, useMotionValue, useMotionValueEvent, useReducedMotion, useTransform } from "framer-motion";
-import { ChevronsRight, Lock, LockOpen, UserRound } from "lucide-react";
+import { BluetoothIcon, ChevronsRightIcon, LockIcon, LockOpenIcon, UserIcon, WifiIcon } from "../icons/DetroitIcons";
 import TriangleGrid from "../background/TriangleGrid";
 import Diode from "../hud/Diode";
 import { unlock } from "../../lib/lock";
@@ -72,13 +72,13 @@ function SlideToUnlock() {
       <motion.span
         aria-hidden
         style={{ opacity: hint }}
-        className="pointer-events-none absolute inset-0 flex items-center justify-center whitespace-nowrap pl-12 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center whitespace-nowrap px-12 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/80"
       >
-        Glisser pour déverrouiller
+        Déverrouiller
       </motion.span>
       {/* Repère d'arrivée */}
       <span aria-hidden className="absolute right-1 top-1 flex size-10 items-center justify-center rounded-full border border-dashed border-white/35 text-white/50">
-        <LockOpen size={16} strokeWidth={1.75} />
+        <LockOpenIcon size={18} strokeWidth={1.5} />
       </span>
       <motion.div
         role="slider"
@@ -97,9 +97,9 @@ function SlideToUnlock() {
         onDragEnd={settle}
         onKeyDown={onKeyDown}
         style={{ x }}
-        className="absolute left-1 top-1 z-10 flex size-10 cursor-grab touch-none items-center justify-center rounded-full bg-white text-[#3a1d31] shadow-[0_0_16px_var(--hud)] outline-none focus-visible:ring-2 focus-visible:ring-hud active:cursor-grabbing"
+        className="absolute left-1 top-1 z-10 flex size-10 cursor-grab touch-none items-center justify-center rounded-full bg-white text-[#2b2347] shadow-[0_0_16px_var(--hud)] outline-none focus-visible:ring-2 focus-visible:ring-hud active:cursor-grabbing"
       >
-        <ChevronsRight size={20} strokeWidth={2} />
+        <ChevronsRightIcon size={20} strokeWidth={1.8} />
       </motion.div>
     </div>
   );
@@ -121,9 +121,18 @@ export default function Lockscreen() {
       initial={{ opacity: 1 }}
       animate={{ opacity: 1 }}
       exit={reduce ? { opacity: 0, transition: { duration: 0.25 } } : { y: "-100%", transition: { duration: 0.7, ease: SOFT } }}
-      className="absolute inset-0 z-30 overflow-hidden bg-[radial-gradient(ellipse_at_30%_20%,#5e2f4b_0%,#2a1424_45%,#0c0e11_100%)] text-white"
+      className="absolute inset-0 z-30 overflow-hidden bg-[radial-gradient(ellipse_at_30%_20%,#463a73_0%,#221b3a_45%,#0c0e11_100%)] text-white"
     >
       <TriangleGrid seed={9} className="absolute inset-0 opacity-[0.12] invert" />
+      {/* Ligne d'état minimale, comme sur l'écran verrouillé d'une vraie tablette (pas de menu) */}
+      <div className="absolute inset-x-0 top-0 z-10 flex h-12 items-center gap-3 pl-5 pr-12 text-white/70 sm:h-14">
+        <span aria-hidden className="size-2.5 rounded-full bg-white/85 ring-[3px] ring-white/20" />
+        <span className="hud-label">Veille</span>
+        <span aria-hidden className="ml-auto flex items-center gap-2.5">
+          <WifiIcon size={15} strokeWidth={1.6} />
+          <BluetoothIcon size={15} strokeWidth={1.6} />
+        </span>
+      </div>
       <div aria-hidden className="absolute inset-0 bg-[radial-gradient(45%_40%_at_80%_85%,rgb(0_209_255/0.18),transparent_70%)]" />
 
       <motion.div
@@ -135,7 +144,7 @@ export default function Lockscreen() {
         {/* Heure et date */}
         <div className="flex flex-col items-center text-center">
           <span className="flex items-center gap-2 hud-label text-white/60">
-            <Lock size={11} strokeWidth={2} /> Verrouillé
+            <LockIcon size={13} strokeWidth={1.8} /> Verrouillé
           </span>
           <p className="mt-3 text-[clamp(4rem,11vw,8.5rem)] leading-none font-extralight tabular-nums tracking-[0.02em]">{time}</p>
           <p className="mt-3 text-[15px] font-medium tracking-[0.08em] text-white/80 first-letter:uppercase">{date}</p>
@@ -145,7 +154,7 @@ export default function Lockscreen() {
         <div className="flex flex-col items-center gap-5">
           <span className="flex items-center gap-3">
             <span className="flex size-11 items-center justify-center rounded-full border border-white/30 bg-white/10">
-              <UserRound size={20} strokeWidth={1.5} />
+              <UserIcon size={22} strokeWidth={1.4} />
             </span>
             <span className="leading-tight">
               <span className="block text-[15px] font-semibold">

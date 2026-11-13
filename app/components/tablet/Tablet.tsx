@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import StatusBar from "./StatusBar";
 import NavBar from "./NavBar";
 import Lockscreen from "./Lockscreen";
 import { AnimatePresence } from "framer-motion";
@@ -16,7 +15,7 @@ import {
 
 /**
  * La tablette, fixe à l'écran : tranche métallique, bord noir, deux coins biseautés (haut droit, bas gauche).
- * Tout vit dedans : barre d'état, barre de menu (onglets, recherche, reconstruction, diode),
+ * Tout vit dedans : la barre (onglets, recherche, reconstruction, Jour / Nuit, session, arrêt, diode),
  * l'écran qui défile (le contenu des pages) et le pied (page n/N, frise, commandes, crédits).
  */
 export default function Tablet({
@@ -60,11 +59,10 @@ export default function Tablet({
             <div className="chamfer relative flex h-full flex-col bg-[#0c0e11] p-[6px] [--ch:35px] [--r:22px] sm:p-[9px]">
               {/* Écran */}
               <div className="chamfer relative flex min-h-0 flex-1 flex-col overflow-hidden bg-surface [--ch:30px] [--r:14px]">
-                <StatusBar />
-                <div className="relative flex min-h-0 flex-1 flex-col">
-                  {/* Verrouillée : la page reste dessous mais n'est plus atteignable (souris, clavier, lecteur d'écran) */}
-                  <div inert={locked} className="flex min-h-0 flex-1 flex-col">
-                    <NavBar />
+                {/* Verrouillée : barre et page restent dessous mais ne sont plus atteignables (souris, clavier, lecteur d'écran) */}
+                <div inert={locked} className="flex min-h-0 flex-1 flex-col">
+                  <NavBar />
+                  <div className="flex min-h-0 flex-1 flex-col">
                     <div className="relative min-h-0 flex-1">
                       <main
                         id={SCREEN_ID}
@@ -77,16 +75,17 @@ export default function Tablet({
                       {/* Calque de l'écran : objectif, sous-titres */}
                       <div
                         id={OVERLAY_ID}
-                        className="pointer-events-none absolute inset-0 z-30"
+                        className="pointer-events-none absolute inset-0 z-30 overflow-hidden"
                       />
                     </div>
                     <div
                       id={FOOTER_ID}
-                      className="chrome-ui relative z-20 min-h-[62px] shrink-0 border-t border-line bg-surface"
+                      className="relative z-20 min-h-[62px] shrink-0 border-t border-line bg-surface"
                     />
                   </div>
-                  <AnimatePresence>{locked && <Lockscreen />}</AnimatePresence>
                 </div>
+                {/* L'écran de verrouillage couvre toute la tablette, barre comprise */}
+                <AnimatePresence>{locked && <Lockscreen />}</AnimatePresence>
                 {/* Reflet sur la vitre */}
                 <span
                   aria-hidden

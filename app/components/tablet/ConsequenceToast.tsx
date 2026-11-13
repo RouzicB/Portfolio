@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { GitFork } from "lucide-react";
+import { ParcoursIcon } from "../icons/DetroitIcons";
 
 /**
  * Après un choix important (élément marqué `data-consequence`), une notification apparaît en haut à gauche,
@@ -44,7 +44,7 @@ export default function ConsequenceToast() {
               transition={{ type: "spring", stiffness: 180, damping: 12 }}
               className="flex size-9 items-center justify-center rounded-full border border-hud text-hud"
             >
-              <GitFork size={17} strokeWidth={1.5} />
+              <ParcoursIcon size={18} strokeWidth={1.4} accent="currentColor" />
             </motion.span>
             <span>
               <span className="block hud-label text-hud">Choix enregistré</span>

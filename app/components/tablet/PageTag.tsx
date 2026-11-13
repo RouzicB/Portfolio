@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "../icons/DetroitIcons";
 import { Corners } from "../hud/Corners";
 
 /** Repère « Page n/N » encadré de coins cyan, avec les flèches pour changer d'écran */
@@ -17,7 +17,7 @@ export default function PageTag({
     <div className="relative flex shrink-0 items-center gap-0.5 bg-surface/85 px-1 py-0.5 backdrop-blur">
       <Corners size={6} tone="border-hud" />
       <button type="button" onClick={onPrev} disabled={current <= 1} aria-label="Page précédente" className={arrow}>
-        <ChevronLeft size={18} strokeWidth={1.5} />
+        <ChevronLeftIcon size={18} strokeWidth={1.5} />
       </button>
       <span className="min-w-[5.5rem] text-center leading-none" aria-label={`Page ${current} sur ${total}${label ? ` : ${label}` : ""}`}>
         <span className="block hud-label text-hud-ink">Page</span>
@@ -27,7 +27,7 @@ export default function PageTag({
         </span>
       </span>
       <button type="button" onClick={onNext} disabled={current >= total} aria-label="Page suivante" className={arrow}>
-        <ChevronRight size={18} strokeWidth={1.5} />
+        <ChevronRightIcon size={18} strokeWidth={1.5} />
       </button>
     </div>
   );

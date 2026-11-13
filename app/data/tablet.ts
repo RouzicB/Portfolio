@@ -63,8 +63,8 @@ export function tabletFor(pathname: string): TabletEntry | undefined {
   return key ? entries[key] : undefined;
 }
 
-/** Devises qui défilent dans la marge de l'écran, comme des journaux système */
-export const marginWords = ["TESTER", "ÉCOUTER", "ITÉRER", "PROTOTYPER", "UTILISATEUR D’ABORD", "SIMPLIFIER", "OBSERVER"] as const;
+/** Codes système qui défilent dans la marge de l'écran (identifiants, registres, états) — pas de mots */
+export const marginCodes = ["BR-26", "0x7F3A", "Δ4.81", "ID//UX", "SYS.OK", "112.408", "N-04", "λ.SYNC", "R/09", "CORE-7", "0x2C3B", "Σ12.6", "UX.042", "Λ-311"] as const;
 
 /** Nom de l'application ouverte, affiché dans la barre d'état */
 export function appOf(pathname: string) {

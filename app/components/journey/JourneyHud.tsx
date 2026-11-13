@@ -9,11 +9,11 @@ import { useJourney } from "./JourneyContext";
 import { useDiode } from "../../lib/diode";
 import { FOOTER_ID, OVERLAY_ID } from "../../lib/screen";
 
-/** Interface du voyage : « Page n/N », lecture, frise code-barres, objectif et pensée de la scène */
+/** Interface du voyage : « Page n/N », frise code-barres, objectif et pensée de la scène */
 export default function JourneyHud({
   progress,
 }: Readonly<{ progress: MotionValue<number> }>) {
-  const { scene, scenes, goTo, playing, togglePlay } = useJourney();
+  const { scene, scenes, goTo } = useJourney();
   const diode = useDiode();
   const current = scenes[scene];
 
@@ -35,16 +35,6 @@ export default function JourneyHud({
           }}
           onPrev={() => goTo(scene - 1)}
           onNext={() => goTo(scene + 1)}
-          extra={
-            <button
-              type="button"
-              onClick={togglePlay}
-              aria-pressed={playing}
-              className="hidden text-[13px] uppercase tracking-[0.06em] text-fg hover:text-cobalt md:inline"
-            >
-              {playing ? "❚❚ Pause" : "▶ Lecture"}
-            </button>
-          }
         />
       </ClientPortal>
     </>

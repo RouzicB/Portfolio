@@ -19,31 +19,15 @@ const styles: Record<FlowNode["kind"], string> = {
   future: "border border-dashed border-muted/50 bg-bg/40 text-muted hover:border-muted",
 };
 
-interface FlowNodeCardProps {
-  node: FlowNode;
-  selected: boolean;
-  onSelect: () => void;
-}
+/** Classes de la carte d'un nœud (position absolue sur le canevas) — partagées avec l'aperçu */
+export const nodeCardClass = (node: Pick<FlowNode, "kind">) =>
+  `group absolute flex flex-col justify-between p-3 text-left transition-colors ${styles[node.kind]}`;
 
-/** Nœud de l'arborescence : bouton qui ouvre le panneau de détail */
-export default function FlowNodeCard({ node, selected, onSelect }: Readonly<FlowNodeCardProps>) {
-  const box = nodeBox(node);
+/** Contenu d'un nœud : type, période, titre — identique dans l'arborescence et dans son aperçu */
+export function FlowNodeContent({ node, selected = false }: Readonly<{ node: FlowNode; selected?: boolean }>) {
   const muted = node.kind === "locked" || node.kind === "future";
-
   return (
-    <motion.button
-      type="button"
-      onClick={onSelect}
-      aria-haspopup="dialog"
-      aria-expanded={selected}
-      aria-label={`${kindLabels[node.kind]} : ${node.title === "?" ? "nœud inconnu" : node.title}`}
-      style={{ left: box.x, top: box.y, width: box.w, height: box.h }}
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: 0.1 + (node.row % 3) * 0.05 }}
-      className={`group absolute flex flex-col justify-between p-3 text-left transition-colors ${styles[node.kind]}`}
-    >
+    <>
       {selected && <Corners size={8} offset={node.kind === "choice" ? 0 : 5} />}
       <span className="flex items-center justify-between gap-2">
         <span className={`flex items-center gap-2 whitespace-nowrap hud-label ${muted ? "text-muted" : "text-body"}`}>
@@ -59,9 +43,36 @@ export default function FlowNodeCard({ node, selected, onSelect }: Readonly<Flow
       >
         {node.title}
       </span>
-      {node.kind === "current" && (
-        <span aria-hidden className="absolute -right-1.5 -top-1.5 size-3 animate-ping rounded-full bg-hud/70" />
-      )}
+      {node.kind === "current" && <span aria-hidden className="absolute -right-1.5 -top-1.5 size-3 animate-ping rounded-full bg-hud/70" />}
+    </>
+  );
+}
+
+interface FlowNodeCardProps {
+  node: FlowNode;
+  selected: boolean;
+  onSelect: () => void;
+}
+
+/** Nœud de l'arborescence : bouton qui ouvre le panneau de détail */
+export default function FlowNodeCard({ node, selected, onSelect }: Readonly<FlowNodeCardProps>) {
+  const box = nodeBox(node);
+
+  return (
+    <motion.button
+      type="button"
+      onClick={onSelect}
+      aria-haspopup="dialog"
+      aria-expanded={selected}
+      aria-label={`${kindLabels[node.kind]} : ${node.title === "?" ? "nœud inconnu" : node.title}`}
+      style={{ left: box.x, top: box.y, width: box.w, height: box.h }}
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5, delay: 0.1 + (node.row % 3) * 0.05 }}
+      className={nodeCardClass(node)}
+    >
+      <FlowNodeContent node={node} selected={selected} />
     </motion.button>
   );
 }

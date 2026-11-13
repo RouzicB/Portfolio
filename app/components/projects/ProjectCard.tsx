@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Lock, Play } from "lucide-react";
+import { LockIcon, PlayIcon } from "../icons/DetroitIcons";
 import Badge from "../ui/Badge";
 import { Corners } from "../hud/Corners";
 import ProjectThumb from "./ProjectThumb";
@@ -16,7 +16,7 @@ export default function ProjectCard({ project, number }: Readonly<{ project: Pro
           <ProjectThumb demo={project.demo} />
           <span className="absolute inset-0 bg-white/0 transition-colors duration-300 group-hover:bg-white/10" />
           <span className="absolute bottom-0 left-0 flex size-6 items-center justify-center bg-loading">
-            <Play size={10} className="fill-[#1d1f22] text-[#1d1f22]" aria-hidden />
+            <PlayIcon size={12} className="text-[#1d1f22]" />
           </span>
         </div>
         <span className="opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -51,7 +51,7 @@ export function LockedSlot({ index }: Readonly<{ index: number }>) {
     <div aria-label="Emplacement verrouillé : projet à venir" role="img">
       <div className="relative flex aspect-video items-center justify-center border border-dashed border-muted/60 bg-bg/50">
         <span className="flex flex-col items-center gap-3 text-muted">
-          <Lock size={34} strokeWidth={1.25} />
+          <LockIcon size={36} strokeWidth={1.2} />
           <span className="hud-label">Accès restreint</span>
         </span>
       </div>

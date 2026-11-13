@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Container from "../components/ui/Container";
+import Stagger from "../components/ui/Stagger";
+import { Item } from "../components/journey/scenes/SceneLayout";
 import DisplayTitle from "../components/hud/DisplayTitle";
 import Flowchart from "../components/flowchart/Flowchart";
 import { NodeIcon } from "../components/flowchart/nodeMeta";
 import { careerChapters, careerNodes } from "../data/career";
 import { flowStats } from "../lib/flowchart";
 import { pad } from "../lib/format";
+import { ArrowLeftIcon, ArrowRightIcon } from "../components/icons/DetroitIcons";
 
 export const metadata: Metadata = {
   title: "Parcours",
@@ -28,19 +31,25 @@ export default function ParcoursPage() {
   return (
     <Container className="pb-16 pt-14 lg:pr-12">
       <div className="grid gap-10 lg:grid-cols-12 lg:pl-14">
-        <div className="lg:col-span-7">
-          <p className="mb-4 hud-label text-hud-ink">
-            Arborescence · {careerChapters.length} chapitres · {careerNodes.length} nœuds
-          </p>
-          <DisplayTitle as="h1" light="Par" bold="cours" />
-          <p className="mt-6 max-w-[520px] text-[17px] font-medium leading-snug text-fg">
-            Mon parcours et mes projets, comme un arbre de choix : chaque décision ouvre une branche… et en referme d’autres.
-          </p>
-          <p className="mt-4 max-w-[520px] text-sm leading-relaxed text-body">
-            Cliquez sur un nœud pour l’analyser. Les branches en pointillés sont les chemins que je n’ai pas pris ; le dernier
-            nœud reste à écrire.
-          </p>
-        </div>
+        <Stagger className="lg:col-span-7">
+          <Item>
+            <p className="mb-4 hud-label text-hud-ink">
+              Arborescence · {careerChapters.length} chapitres · {careerNodes.length} nœuds
+            </p>
+            <DisplayTitle as="h1" light="Par" bold="cours" />
+          </Item>
+          <Item>
+            <p className="mt-6 max-w-[520px] text-[17px] font-medium leading-snug text-fg">
+              Mon parcours et mes projets, comme un arbre de choix : chaque décision ouvre une branche… et en referme d’autres.
+            </p>
+          </Item>
+          <Item>
+            <p className="mt-4 max-w-[520px] text-sm leading-relaxed text-body">
+              Cliquez sur un nœud pour l’analyser. Les branches en pointillés sont les chemins que je n’ai pas pris ; le dernier
+              nœud reste à écrire.
+            </p>
+          </Item>
+        </Stagger>
 
         {/* Bilan, comme l'écran de fin de chapitre */}
         <dl className="grid grid-cols-3 gap-6 self-end lg:col-span-5">
@@ -78,7 +87,9 @@ export default function ParcoursPage() {
         ))}
       </ul>
 
-      <p className="mt-8 hud-label text-body lg:hidden">← Faites glisser l’arborescence →</p>
+      <p className="mt-8 flex items-center gap-2 hud-label text-body lg:hidden">
+        <ArrowLeftIcon size={13} strokeWidth={1.8} /> Faites glisser l’arborescence <ArrowRightIcon size={13} strokeWidth={1.8} />
+      </p>
 
       <div className="mt-10">
         <Flowchart />

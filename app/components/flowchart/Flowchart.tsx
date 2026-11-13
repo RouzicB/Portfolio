@@ -5,9 +5,31 @@ import { AnimatePresence, motion } from "framer-motion";
 import FlowNodeCard from "./FlowNodeCard";
 import NodePanel from "./NodePanel";
 import ClientPortal from "../tablet/ClientPortal";
+import { OVERLAY_ID } from "../../lib/screen";
 import { careerChapters, careerEdges, careerNodes } from "../../data/career";
 import { ROW_H, TOP, canvasSize, edgePath, isUnlocked } from "../../lib/flowchart";
 import { pad } from "../../lib/format";
+
+/** Bandes de chapitres (numéro, titre, séparateur) — partagées avec l'aperçu */
+export function ChapterBands() {
+  return (
+    <>
+      {careerChapters.map((chapter, i) => (
+        <div
+          key={chapter.id}
+          className="absolute inset-x-0"
+          style={{ top: TOP + chapter.rows[0] * ROW_H - 28, height: (chapter.rows[1] - chapter.rows[0] + 1) * ROW_H }}
+        >
+          {i > 0 && <span aria-hidden className="absolute inset-x-0 top-0 border-t border-dashed border-line" />}
+          <p className="absolute left-0 top-7 w-32">
+            <span className="block text-[28px] leading-none font-light text-hud-ink">{pad(i + 1)}</span>
+            <span className="mt-1 block hud-label text-body">{chapter.title}</span>
+          </p>
+        </div>
+      ))}
+    </>
+  );
+}
 
 /** Arborescence du parcours : chapitres, liens coudés, nœuds cliquables */
 export default function Flowchart() {
@@ -21,20 +43,7 @@ export default function Flowchart() {
     <>
       <div className="-mx-6 overflow-x-auto px-6 pb-8 lg:mx-0 lg:overflow-visible lg:px-0">
         <div className="relative mx-auto" style={{ width, height }}>
-          {/* Bandes de chapitres */}
-          {careerChapters.map((chapter, i) => (
-            <div
-              key={chapter.id}
-              className="absolute inset-x-0"
-              style={{ top: TOP + chapter.rows[0] * ROW_H - 28, height: (chapter.rows[1] - chapter.rows[0] + 1) * ROW_H }}
-            >
-              {i > 0 && <span aria-hidden className="absolute inset-x-0 top-0 border-t border-dashed border-line" />}
-              <p className="absolute left-0 top-7 w-32">
-                <span className="block text-[28px] leading-none font-light text-hud-ink">{pad(i + 1)}</span>
-                <span className="mt-1 block hud-label text-body">{chapter.title}</span>
-              </p>
-            </div>
-          ))}
+          <ChapterBands />
 
           {/* Liens : chemin emprunté en cyan, chemins non pris en pointillés */}
           <svg aria-hidden width={width} height={height} className="absolute inset-0 overflow-visible">
@@ -78,9 +87,10 @@ export default function Flowchart() {
         </div>
       </div>
 
-      {/* Rendu dans <body> : le panneau reste fixé à l'écran, hors de la tablette */}
-      <ClientPortal>
-        <AnimatePresence>{node && <NodePanel key={node.id} node={node} onClose={close} />}</AnimatePresence>
+      {/* Rendu dans le calque de l'écran : le panneau glisse dans la tablette, sous la barre */}
+      <ClientPortal target={OVERLAY_ID}>
+        {/* Un seul panneau : il reste ouvert et change de contenu quand on choisit un autre nœud */}
+        <AnimatePresence>{node && <NodePanel key="panel" node={node} onClose={close} />}</AnimatePresence>
       </ClientPortal>
     </>
   );

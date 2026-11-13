@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ToolLogo from "../components/icons/ToolLogos";
 import Container from "../components/ui/Container";
 import Badge from "../components/ui/Badge";
 import Reveal from "../components/ui/Reveal";
@@ -102,10 +103,14 @@ export default function AboutPage() {
         </ol>
 
         <SectionTab title="Outils" code="03.3" />
-        <ul className="flex flex-wrap justify-center gap-x-10 gap-y-4">
+        {/* Logos en une seule couleur, cyan au survol */}
+        <ul className="flex flex-wrap justify-center gap-x-12 gap-y-8">
           {tools.map((t) => (
-            <li key={t} className="text-[22px] font-light uppercase tracking-[0.04em] text-body">
-              {t}
+            <li key={t} data-interact={t} className="group flex flex-col items-center gap-3 text-body transition-colors hover:text-hud-ink">
+              <span className="flex size-16 items-center justify-center border border-line bg-surface/70 transition-colors group-hover:border-hud">
+                <ToolLogo name={t} size={30} />
+              </span>
+              <span className="text-[13px] font-medium uppercase tracking-[0.08em]">{t}</span>
             </li>
           ))}
         </ul>

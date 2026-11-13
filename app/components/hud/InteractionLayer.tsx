@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { CornerDownLeft, MousePointer2 } from "lucide-react";
+import { EnterIcon, PointerIcon } from "../icons/DetroitIcons";
 
 /** Éléments qui reçoivent l'indicateur au survol ou au focus clavier */
 const INTERACTIVE =
@@ -11,12 +11,10 @@ const INTERACTIVE =
 /** Distance (px) en deçà de laquelle le nom d'un objet voisin apparaît */
 const NEAR = 170;
 
-type Shape = "ring" | "box" | "underline";
 type Side = { x: "right" | "left"; y: "up" | "down" };
 
 interface Target {
   el: HTMLElement;
-  shape: Shape;
   verb: string;
   keyboard: boolean;
   side: Side;
@@ -33,7 +31,7 @@ interface Nearby {
 }
 
 /** Marge autour de l'élément [horizontale, verticale] */
-const PAD: Record<Shape, readonly [number, number]> = { ring: [10, 10], box: [7, 6], underline: [4, 0] };
+const PAD = [7, 6] as const;
 
 function pick(node: EventTarget | null) {
   if (!(node instanceof Element)) return null;
@@ -56,20 +54,9 @@ export function verbOf(el: HTMLElement) {
   return "Utiliser";
 }
 
-function shapeOf(el: HTMLElement, width: number, height: number): Shape {
-  const wanted = el.dataset.prompt;
-  if (wanted === "ring" || wanted === "box" || wanted === "underline") return wanted;
-  if (el.matches('input[type="text"], input[type="search"]')) return "underline";
-  return width < 56 && height < 56 ? "ring" : "box";
-}
-
-function frameOf(shape: Shape, r: Pick<DOMRect, "left" | "top" | "width" | "height" | "bottom">) {
-  const [px, py] = PAD[shape];
-  if (shape === "underline") return { x: r.left - px, y: r.bottom - 4, w: r.width + px * 2, h: 8 };
-  if (shape === "ring") {
-    const size = Math.max(r.width, r.height) + px * 2;
-    return { x: r.left + r.width / 2 - size / 2, y: r.top + r.height / 2 - size / 2, w: size, h: size };
-  }
+/** Cadre en équerres autour de l'élément : le même pour tout (onglets, boutons, liens, champs…) */
+function frameOf(r: Pick<DOMRect, "left" | "top" | "width" | "height">) {
+  const [px, py] = PAD;
   return { x: r.left - px, y: r.top - py, w: r.width + px * 2, h: r.height + py * 2 };
 }
 
@@ -106,7 +93,7 @@ function Brackets() {
 /** Indicateur d'interaction : trait, cercle avec l'icône (souris ou touche Entrée), verbe d'action */
 function Prompt({ target }: Readonly<{ target: Target }>) {
   const pos = layout(target.side);
-  const Icon = target.keyboard ? CornerDownLeft : MousePointer2;
+  const Icon = target.keyboard ? EnterIcon : PointerIcon;
   return (
     <>
       <svg aria-hidden width="34" height="30" viewBox="0 0 34 30" className="absolute overflow-visible" style={{ ...pos.line, transformOrigin: "center" }}>
@@ -127,7 +114,7 @@ function Prompt({ target }: Readonly<{ target: Target }>) {
         className="absolute flex size-[44px] items-center justify-center rounded-full border-2 border-white bg-[#0c0e11]/70 text-white shadow-[0_0_12px_var(--hud)]"
         style={pos.bubble}
       >
-        <Icon size={18} strokeWidth={1.75} />
+        <Icon size={19} strokeWidth={1.7} />
       </motion.span>
       <motion.span
         initial={{ opacity: 0, x: target.side.x === "right" ? -6 : 6 }}
@@ -147,7 +134,7 @@ function Prompt({ target }: Readonly<{ target: Target }>) {
  * - l'élément survolé (souris) ou atteint au clavier est encadré d'équerres cyan,
  *   avec un cercle (souris ou Entrée) et le verbe d'action (`data-prompt-label`, sinon déduit : Aller, Ouvrir, Écrire…) ;
  * - les objets voisins (`data-interact="Nom"`) affichent discrètement leur nom quand le pointeur s'approche.
- * `data-prompt="ring|box|underline|none"` force la forme de l'indicateur ou le désactive.
+ * Toujours le même cadre en équerres, quelle que soit la taille de l'élément. `data-prompt="none"` le désactive.
  */
 export default function InteractionLayer() {
   const pathname = usePathname();
@@ -171,17 +158,15 @@ export default function InteractionLayer() {
         return;
       }
       const r = el.getBoundingClientRect();
-      const shape = shapeOf(el, r.width, r.height);
       counter.current += 1;
       setTarget({
         el,
-        shape,
         verb: verbOf(el),
         keyboard: viaKeyboard,
         side: sideOf(r),
         key: counter.current,
         path: window.location.pathname,
-        rect: frameOf(shape, r),
+        rect: frameOf(r),
       });
     };
 
@@ -282,7 +267,7 @@ export default function InteractionLayer() {
         return;
       }
       if (node) {
-        const r = frameOf(target.shape, target.el.getBoundingClientRect());
+        const r = frameOf(target.el.getBoundingClientRect());
         node.style.transform = `translate3d(${r.x}px, ${r.y}px, 0)`;
         node.style.width = `${r.w}px`;
         node.style.height = `${r.h}px`;
@@ -314,25 +299,7 @@ export default function InteractionLayer() {
           className="pointer-events-none fixed left-0 top-0 z-[55] drop-shadow-[0_0_4px_rgb(0_209_255/0.55)]"
           style={{ transform: `translate3d(${target.rect.x}px, ${target.rect.y}px, 0)`, width: target.rect.w, height: target.rect.h }}
         >
-          {target.shape === "box" && <Brackets key={target.key} />}
-          {target.shape === "ring" && (
-            <motion.span
-              key={target.key}
-              initial={{ opacity: 0, scale: 1.3 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.2 }}
-              className="absolute inset-0 rounded-full border-2 border-hud"
-            />
-          )}
-          {target.shape === "underline" && (
-            <motion.span
-              key={target.key}
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.25 }}
-              className="absolute inset-x-0 top-1/2 h-0.5 origin-left bg-hud"
-            />
-          )}
+          <Brackets key={target.key} />
           <Prompt key={`prompt-${target.key}`} target={target} />
         </div>
       )}

@@ -1,6 +1,5 @@
 "use client";
 
-import { type ReactNode } from "react";
 import Link from "next/link";
 import { useTransform, type MotionValue } from "framer-motion";
 import Barcode from "./Barcode";
@@ -15,12 +14,10 @@ interface BottomBarProps {
   page: { current: number; total: number; label?: string };
   onPrev: () => void;
   onNext: () => void;
-  /** Commande supplémentaire à côté du repère de page (ex. lecture automatique) */
-  extra?: ReactNode;
 }
 
 /** Pied de la tablette : « Page n/N » · frise code-barres · commandes · crédits */
-export default function BottomBar({ progress, tone = "hud", page, onPrev, onNext, extra }: Readonly<BottomBarProps>) {
+export default function BottomBar({ progress, tone = "hud", page, onPrev, onNext }: Readonly<BottomBarProps>) {
   const label = useTransform(progress, (v) => timecode(v));
 
   return (
@@ -29,13 +26,11 @@ export default function BottomBar({ progress, tone = "hud", page, onPrev, onNext
         {/* Crédit de la direction artistique, sous la frise */}
         <Link
           href="/credits"
-          data-prompt="underline"
           className="absolute bottom-0.5 left-1/2 hidden -translate-x-1/2 whitespace-nowrap text-[8px] tracking-[0.04em] text-muted transition-colors hover:text-hud-ink sm:block"
         >
           {credits.short} · Crédits
         </Link>
         <PageTag current={page.current} total={page.total} label={page.label} onPrev={onPrev} onNext={onNext} />
-        {extra}
         <div className="mx-auto hidden w-full max-w-[480px] sm:block">
           <Barcode progress={progress} label={label} tone={tone} />
         </div>

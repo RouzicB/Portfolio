@@ -179,14 +179,14 @@ html.dark {
   background-image: repeating-linear-gradient(180deg, transparent 0 27px, color-mix(in srgb, var(--line) 35%, transparent) 27px 28px);
 }
 
-/* Le chrome de l'interface (onglets, barre basse, objectif) */
-.chrome-ui {
-  transition: opacity 0.6s ease;
+/* L'objectif s'efface quand un panneau s'ouvre dans l'écran (détail d'un nœud, recherche) */
+.objective-hud {
+  transition: opacity 0.25s ease, visibility 0.25s;
 }
 
-/* Moment critique : l'interface s'efface pour laisser le choix seul */
-html[data-critical] .chrome-ui:not(:hover):not(:focus-within) {
-  opacity: 0.15;
+#tablet-overlay:has([role="dialog"]) .objective-hud {
+  opacity: 0;
+  visibility: hidden;
 }
 
 /* ─── Reconstruction : la tablette « glitche » pendant le retour en arrière ── */

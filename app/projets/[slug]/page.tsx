@@ -17,6 +17,7 @@ import ProjectThumb from "../../components/projects/ProjectThumb";
 import ProjectDemo from "../../components/demos/ProjectDemo";
 import { demoLabels, getProjectBySlug, projects } from "../../data/projects";
 import { pad } from "../../lib/format";
+import { ArrowLeftIcon, ArrowRightIcon } from "../../components/icons/DetroitIcons";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -50,8 +51,8 @@ export default async function CaseStudyPage({ params }: Props) {
         left={
           <>
             <Item>
-              <Link href="/projets" className="mb-6 inline-block hud-label text-body hover:text-fg">
-                ← Archives
+              <Link href="/projets" className="mb-6 inline-flex items-center gap-1.5 hud-label text-body hover:text-fg">
+                <ArrowLeftIcon size={14} strokeWidth={1.8} /> Archives
               </Link>
               <p className="mb-4 hud-label text-hud-ink">
                 Dossier {pad(index + 1)} · {project.client}
@@ -176,7 +177,9 @@ export default async function CaseStudyPage({ params }: Props) {
                   {next.display.light}
                   <span className="font-bold">{next.display.bold}</span>
                 </span>
-                <span className="mt-2 block text-[15px] text-body">{next.title} →</span>
+                <span className="mt-2 flex items-center gap-2 text-[15px] text-body">
+                  {next.title} <ArrowRightIcon size={16} strokeWidth={1.6} />
+                </span>
               </Link>
             </div>
           </>

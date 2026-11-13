@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useTransform } from "framer-motion";
-import { Link2, Play } from "lucide-react";
+import { LinkIcon, PlayIcon } from "../../icons/DetroitIcons";
 import SceneLayout, { Item } from "./SceneLayout";
 import DisplayTitle from "../../hud/DisplayTitle";
 import TriangleFrame from "../../hud/TriangleFrame";
@@ -35,7 +35,7 @@ export default function ContactScene({ local }: Readonly<SceneProps>) {
             </p>
           </Item>
           <Item className="mt-6">
-            <IconLink href={site.socials.linkedin} icon={Link2} external>
+            <IconLink href={site.socials.linkedin} icon={LinkIcon} external>
               LinkedIn
             </IconLink>
           </Item>
@@ -61,7 +61,7 @@ export default function ContactScene({ local }: Readonly<SceneProps>) {
                 aria-label="Explorer les études de cas"
                 className="flex size-14 items-center justify-center rounded-full bg-white/90 shadow-lg transition-transform hover:scale-105"
               >
-                <Play size={20} className="ml-1 fill-[#1d1f22] text-[#1d1f22]" />
+                <PlayIcon size={22} className="ml-0.5 text-[#1d1f22]" />
               </Link>
             }
           />

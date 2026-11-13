@@ -2,24 +2,17 @@
 
 import { useEffect } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Rewind } from "lucide-react";
-import { playRewind, useRewindEffect } from "../../lib/rewind";
+import { RewindIcon } from "../icons/DetroitIcons";
+import { useRewindEffect } from "../../lib/rewind";
 
 /**
  * Reconstruction (remonter le temps) : l'écran passe au bleu, des lignes de balayage le parcourent,
  * une barre de lecture recule, et la tablette elle-même « glitche » (classe `rewind-target`).
- * Déclenché par playRewind() : Retour, ⌫, retour du navigateur, remontée dans l'accueil.
+ * Déclenché uniquement par le bouton ◄◄ de la barre de la tablette (playRewind).
  */
 export default function ReconstructionOverlay() {
   const active = useRewindEffect();
   const reduce = useReducedMotion();
-
-  // Retour du navigateur
-  useEffect(() => {
-    const onPop = () => playRewind(1000);
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
-  }, []);
 
   // La tablette glitche pendant l'effet
   useEffect(() => {
@@ -56,7 +49,7 @@ export default function ReconstructionOverlay() {
           {/* Libellé et barre de lecture qui recule */}
           <div className="absolute left-1/2 top-1/2 flex w-[min(80vw,420px)] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-3 text-white">
             <span className="flex items-center gap-3 text-[15px] font-semibold uppercase tracking-[0.4em] [text-shadow:0_0_12px_#00d1ff]">
-              <Rewind size={22} strokeWidth={1.5} />
+              <RewindIcon size={24} strokeWidth={1.6} accent="currentColor" />
               Reconstruction
             </span>
             <span className="relative block h-px w-full bg-white/30">

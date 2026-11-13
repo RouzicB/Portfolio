@@ -15,12 +15,9 @@ import JourneyHud from "./JourneyHud";
 import { JourneyContext, type SceneDef } from "./JourneyContext";
 import { EASE } from "./motion";
 import { flashLoading } from "../../lib/diode";
-import { playRewind } from "../../lib/rewind";
 import { setMoodOverride } from "../../lib/mood";
 import { useScreenRef } from "../../lib/screen";
 
-/** Durée d'une scène en lecture automatique */
-const AUTOPLAY_MS = 5000;
 /** Durée de la transition entre deux scènes */
 const TRANSITION_S = 0.9;
 
@@ -47,12 +44,10 @@ const wipe: Variants = {
     zIndex: 2,
     transition: { duration: reduce ? 0.3 : TRANSITION_S, ease: EASE },
   }),
-  exit: ({ dir, reduce }: TransitionCustom) => {
+  exit: ({ reduce }: TransitionCustom) => {
     if (reduce) return { zIndex: 1, opacity: 0, transition: { duration: 0.3 } };
-    // On avance : l'écran s'efface. On remonte : reconstruction, il se désature, se brouille et passe au bleu
-    return dir > 0
-      ? { zIndex: 1, opacity: 0, scale: 0.97, filter: "blur(4px)", transition: { duration: TRANSITION_S, ease: EASE } }
-      : { zIndex: 1, opacity: 0, scale: 1.06, filter: "blur(8px) saturate(0.2) hue-rotate(-30deg)", transition: { duration: TRANSITION_S, ease: EASE } };
+    // L'écran précédent s'efface doucement, dans les deux sens
+    return { zIndex: 1, opacity: 0, scale: 0.97, filter: "blur(4px)", transition: { duration: TRANSITION_S, ease: EASE } };
   },
 };
 
@@ -113,7 +108,6 @@ export default function Journey({ scenes }: Readonly<{ scenes: SceneDef[] }>) {
   const { bounds, totalLength } = useMemo(() => sceneBounds(scenes), [scenes]);
 
   const [entry, setEntry] = useState({ index: 0, direction: 1, firstVisit: true });
-  const [playing, setPlaying] = useState(false);
   const current = useRef(0);
   const visited = useRef(new Set([0]));
 
@@ -127,18 +121,14 @@ export default function Journey({ scenes }: Readonly<{ scenes: SceneDef[] }>) {
     const direction = next > current.current ? 1 : -1;
     setEntry({ index: next, direction, firstVisit });
     current.current = next;
-    // Remonter l'accueil = reconstruction
-    if (direction < 0) playRewind(TRANSITION_S * 1000 + 100);
-    else flashLoading(TRANSITION_S * 1000);
+    flashLoading(TRANSITION_S * 1000);
   });
 
-  // Lumière autour de la tablette et moment critique propres à chaque scène
+  // Lumière autour de la tablette propre à chaque scène
   const def = scenes[entry.index];
   useEffect(() => {
     setMoodOverride(def.mood ?? "stable", "/");
-    document.documentElement.toggleAttribute("data-critical", Boolean(def.critical));
   }, [def]);
-  useEffect(() => () => document.documentElement.removeAttribute("data-critical"), []);
 
   const goTo = useCallback(
     (i: number) => {
@@ -153,27 +143,13 @@ export default function Journey({ scenes }: Readonly<{ scenes: SceneDef[] }>) {
     [bounds, reduce, container]
   );
 
-  // Lecture automatique : passe à la scène suivante, s'arrête à la dernière
-  useEffect(() => {
-    if (!playing) return;
-    const timer = setTimeout(() => {
-      if (entry.index >= scenes.length - 1) setPlaying(false);
-      else goTo(entry.index + 1);
-    }, AUTOPLAY_MS);
-    return () => clearTimeout(timer);
-  }, [playing, entry.index, scenes.length, goTo]);
-
-  const togglePlay = useCallback(() => setPlaying((p) => !p), []);
-
   const value = useMemo(
     () => ({
       scene: entry.index,
-      scenes: scenes.map((s) => ({ id: s.id, label: s.label, objective: s.objective, thought: s.thought, mood: s.mood, critical: s.critical })),
+      scenes: scenes.map((s) => ({ id: s.id, label: s.label, objective: s.objective, thought: s.thought, mood: s.mood })),
       goTo,
-      playing,
-      togglePlay,
     }),
-    [entry.index, scenes, goTo, playing, togglePlay]
+    [entry.index, scenes, goTo]
   );
 
   return (

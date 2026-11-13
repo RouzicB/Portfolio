@@ -12,6 +12,7 @@ function ScreenAlbum({ children }: Readonly<{ children: ReactNode }>) {
     <div className="relative min-h-full">
       <div className="screen-panel absolute inset-y-0 left-0 w-full lg:w-1/2">
         <ScreenBackdrop variant="triangles" seed={4} className="h-[900px]" />
+        <MarginData seed={4} className="left-1 sm:left-2" />
       </div>
       <div className="screen-grid absolute inset-y-0 right-0 hidden w-1/2 lg:block">
         <div className="absolute inset-x-0 top-0 h-[900px]">

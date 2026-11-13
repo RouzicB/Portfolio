@@ -44,7 +44,7 @@ function Panel({ text }: Readonly<{ text: string }>) {
 export default function Objective({ text }: Readonly<{ text?: string }>) {
   if (!text) return null;
   return (
-    <div className="chrome-ui pointer-events-auto absolute right-5 top-4 hidden md:block">
+    <div className="objective-hud pointer-events-auto absolute right-5 top-4 hidden md:block">
       <Panel key={text} text={text} />
     </div>
   );

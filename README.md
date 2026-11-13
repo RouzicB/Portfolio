@@ -8,7 +8,7 @@ partagé, arborescence du parcours, études de cas interactives.
 - **Next.js 16** (App Router, Turbopack, sortie `standalone`)
 - **React 19** + **TypeScript** (strict)
 - **Tailwind CSS v4** (via `@tailwindcss/postcss`, tokens dans `app/globals.css`)
-- **next-themes** (mode clair / sombre), **framer-motion** (animations), **lucide-react** (icônes)
+- **next-themes** (mode clair / sombre), **framer-motion** (animations) ; icônes dessinées sur mesure (`app/components/icons/DetroitIcons.tsx`)
 - **Jest 30** + **Testing Library** (tests), **ESLint 9** (`eslint-config-next`)
 - **Docker** multi-stage (`Dockerfile`)
 
@@ -79,7 +79,7 @@ public/                     # Images, favicon, CV…
 
 ### Une interface diégétique : tout est dans la tablette
 
-- **La tablette** remplace le carnet : tranche métallique, bord noir, deux coins biseautés, barre d’état prune
+- **La tablette** remplace le carnet : tranche métallique, bord noir, deux coins biseautés, barre violette
   (capteur, application ouverte, réseau, messages, session « Baptiste R. », bouton d’arrêt = retour à l’accueil).
 - **Accueil** : chaque scène est un écran partagé (texte à gauche, visuel à droite, séparateur avec poignée).
   **Projets** : un long écran partagé (archives à gauche, plan annoté à droite), dossiers verrouillés à la suite.
@@ -87,7 +87,7 @@ public/                     # Images, favicon, CV…
 - **Onglets d’application** au-dessus de la tablette ; l’onglet ouvert prend la couleur de la barre d’état.
 - **Indicateurs d’interaction** : au survol (ou au clavier), équerres cyan, cercle (souris ou Entrée) et verbe d’action.
   Les objets voisins (`data-interact="Nom"`) affichent leur nom quand le pointeur s’approche.
-  Attributs : `data-prompt="ring|box|underline|none"`, `data-prompt-label="Verbe"`.
+  Le cadre est toujours le même rectangle à équerres. Attributs : `data-prompt="none"` (désactiver), `data-prompt-label="Verbe"`.
 - **Objectif** en haut à droite, **pensées en sous-titres** (une fois par visite), **« Page n/N »** et commandes
   **↵ Sélectionner · ⌫ Retour · Q Quitter**.
 - **Lumière d’ambiance** autour de la tablette, aux couleurs de la diode : bleu stable, analyse, chaleur,

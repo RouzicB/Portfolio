@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Search, X } from "lucide-react";
+import { CloseIcon, SearchIcon } from "../icons/DetroitIcons";
 import ScreenBackdrop from "../tablet/ScreenBackdrop";
 import { searchSite } from "../../lib/search";
 
@@ -33,20 +33,21 @@ export default function SearchOverlay({ onClose }: Readonly<{ onClose: () => voi
       role="dialog"
       aria-modal="true"
       aria-label="Recherche"
-      initial={{ opacity: 0, y: -16 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.45, ease: SOFT }}
-      className="pointer-events-auto absolute inset-0 z-20 overflow-y-auto bg-surface/95 backdrop-blur-md"
+      // Glisse depuis le dessous de la barre (le calque de l'écran le découpe) ; seule la position est animée
+      initial={{ y: "-100%" }}
+      animate={{ y: 0 }}
+      exit={{ y: "-100%", transition: { duration: 0.35, ease: SOFT } }}
+      transition={{ duration: 0.5, ease: SOFT }}
+      className="pointer-events-auto absolute inset-0 z-20 overflow-y-auto bg-surface shadow-[0_12px_30px_-12px_rgb(11_18_32/0.35)] will-change-transform"
     >
       <ScreenBackdrop variant="triangles" seed={7} className="opacity-50" />
       <div className="relative mx-auto max-w-[960px] px-8 pb-16 pt-12 sm:px-14">
         <button type="button" onClick={onClose} aria-label="Fermer la recherche" className="absolute right-6 top-6 text-body hover:text-fg sm:right-10">
-          <X size={24} strokeWidth={1.25} />
+          <CloseIcon size={24} strokeWidth={1.4} />
         </button>
 
         <p className="flex items-center gap-2 hud-label text-hud-ink">
-          <Search size={12} strokeWidth={2} aria-hidden /> Recherche · Ctrl + K
+          <SearchIcon size={13} strokeWidth={1.8} /> Recherche · Ctrl + K
         </p>
         <form
           onSubmit={(e) => {

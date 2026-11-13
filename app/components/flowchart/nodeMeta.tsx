@@ -1,4 +1,4 @@
-import { Briefcase, CircleDot, Diamond, Flag, GitFork, GraduationCap, Lock, Play } from "lucide-react";
+import { ChoiceIcon, CurrentIcon, DiamondIcon, FlagIcon, LockIcon, PlayIcon, StudyIcon, WorkIcon } from "../icons/DetroitIcons";
 import type { FlowKind, FlowNode } from "../../data/career";
 
 export const kindLabels: Record<FlowKind, string> = {
@@ -18,13 +18,13 @@ export function NodeIcon({ node }: Readonly<{ node: Pick<FlowNode, "kind" | "dom
     case "project":
       return (
         <span className={`${box} bg-loading text-[#1d1f22]`}>
-          <Play size={9} className="fill-current" aria-hidden />
+          <PlayIcon size={11} />
         </span>
       );
     case "locked":
       return (
         <span className={`${box} border border-dashed border-muted/60 text-muted`}>
-          <Lock size={10} aria-hidden />
+          <LockIcon size={12} strokeWidth={1.6} accent="currentColor" />
         </span>
       );
     case "future":
@@ -32,26 +32,26 @@ export function NodeIcon({ node }: Readonly<{ node: Pick<FlowNode, "kind" | "dom
     case "choice":
       return (
         <span className={`${box} bg-hud/15 text-hud-ink`}>
-          <GitFork size={11} aria-hidden />
+          <ChoiceIcon size={13} strokeWidth={1.6} />
         </span>
       );
     case "current":
       return (
         <span className={`${box} bg-hud text-white`}>
-          <CircleDot size={11} aria-hidden />
+          <CurrentIcon size={13} strokeWidth={1.6} accent="currentColor" />
         </span>
       );
     case "start":
       return (
         <span className={`${box} bg-fg text-bg`}>
-          <Flag size={10} aria-hidden />
+          <FlagIcon size={12} strokeWidth={1.6} />
         </span>
       );
     default: {
-      const Icon = node.domain === "formation" ? GraduationCap : node.domain === "work" ? Briefcase : Diamond;
+      const Icon = node.domain === "formation" ? StudyIcon : node.domain === "work" ? WorkIcon : DiamondIcon;
       return (
         <span className={`${box} border border-hud/60 text-hud-ink`}>
-          <Icon size={11} aria-hidden />
+          <Icon size={13} strokeWidth={1.6} />
         </span>
       );
     }
